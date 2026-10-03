@@ -1,0 +1,22 @@
+# Dependencias de Node / Angular
+frontend-angular/node_modules/
+frontend-angular/.angular/
+frontend-angular/dist/
+dist/
+
+# Compilados de Java
+backend-springboot/target/
+backend-springboot/bin/
+bin/
+*.class
+
+# Archivos de IDE y sistema
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Temporales y logs
+*.log
+npm-debug.log*
