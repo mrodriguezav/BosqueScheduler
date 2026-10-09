@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P1 Wireframe (Angular 18 + Spring Boot): ajuste manual de horarios</title>
+<style>
+:root{--ln:#666;--bg:#fff;--tx:#222;--mt:#777;--cell:#f7f7f7;--bad:#b00020;--warn:#8a6100}
+@media (prefers-color-scheme: dark){:root{--ln:#999;--bg:#1d1d1d;--tx:#eee;--mt:#aaa;--cell:#262626;--bad:#ff7a8a;--warn:#e8c06a}}
+*{box-sizing:border-box} body{font:13px/1.35 Arial,Helvetica,sans-serif;margin:0;padding:12px;background:var(--bg);color:var(--tx)}
+h1{font-size:15px;margin:0 0 8px} .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:8px;flex-wrap:wrap}
+.wrap{display:grid;grid-template-columns:190px 1fr;gap:10px} .panel{border:1.5px solid var(--ln);padding:6px;min-height:80px}
+.panel h2{font-size:12px;margin:0 0 6px}
+table{border-collapse:collapse;width:100%;table-layout:fixed} th,td{border:1px solid var(--ln);text-align:center;padding:2px;height:50px;vertical-align:top}
+th{height:auto;font-size:12px} td.h{width:48px;font-size:11px;color:var(--mt);vertical-align:middle;border:none}
+td.drop{background:var(--cell)} td.over{outline:2px dashed var(--tx);outline-offset:-3px} td.sab{background:repeating-linear-gradient(45deg,transparent 0 5px,rgba(120,120,120,.18) 5px 6px)}
+td.nodoc{background:repeating-linear-gradient(45deg,transparent 0 4px,rgba(120,120,120,.35) 4px 5px)}
+.card{border:1.5px solid var(--tx);padding:2px 4px;font-size:11px;text-align:left;cursor:grab;background:var(--bg);user-select:none}
+.card small{display:block;color:var(--mt);font-size:10px} .card.pend{border-style:dashed;margin-bottom:6px;cursor:grab}
+.msg{border:1.5px solid var(--ln);padding:6px 8px;margin-top:10px;min-height:64px} .msg .bad{color:var(--bad);font-weight:bold} .msg .warn{color:var(--warn);font-weight:bold} .msg .ok{font-weight:bold}
+.log{font-size:11px;color:var(--mt);margin-top:6px;max-height:84px;overflow:auto} select{font-size:12px}
+@media (max-width:640px){.wrap{grid-template-columns:1fr}}
+</style></head><body>
+<div class="top"><h1>Horario semanal (propuesta generada)</h1>
+<label>Ver por: <select id="vista"><option value="">Todos</option></select></label></div>
+<div class="wrap">
+<div class="panel"><h2>Sin ubicar (RF5)</h2><div id="pend"></div></div>
+<div><table id="grid"></table></div></div>
+<div class="msg" id="msg"><span class="ok">Arrastre una tarjeta a otro bloque.</span></div>
+<div class="log" id="log"></div>
+<script>
+// Wireframe de P1: reglas simuladas sobre un estado fijo. No usa el motor real.
+var DIAS=['Lun','Mar','Mié','Jue','Vie','Sáb'], BLOQ=[7,9,13,15,17,19];
+var DOC={D1:{},D3:{},D4:{desde:16},D5:{}}, AULAS={C1:{t:'computo',c:34},C2:{t:'computo',c:34},E3:{t:'estandar',c:45},E4:{t:'estandar',c:50},M1:{t:'movil',c:44}};
+var CURSOS={K01:{n:'Programación I',f:4},K02:{n:'Cálculo Diferencial',f:3},K03:{n:'Física Mecánica',f:3},K05:{n:'Ing. de Software I',f:3},K08:{n:'Redes de Datos I',f:2},K09:{n:'Bases de Datos',f:2,t:'computo',ins:44}};
+var S=[ // id, curso, docente, aula, dia, hora
+ ['K01#0','K01','D1','C1',0,7],['K01#1','K01','D1','C1',1,7],['K01#2','K01','D1','C1',3,7],['K01#3','K01','D1','C1',4,7],
+ ['K02#0','K02','D5','E3',0,9],['K02#1','K02','D5','E3',2,9],['K02#2','K02','D5','E3',4,9],
+ ['K03#0','K03','D4','E4',0,17],['K03#1','K03','D4','E4',2,17],['K03#2','K03','D4','E4',4,17],
+ ['K05#0','K05','D5','M1',1,15],['K05#1','K05','D5','M1',3,15],['K05#2','K05','D5','M1',5,7],
+ ['K08#0','K08','D3','C2',1,13],['K08#1','K08','D3','C2',3,13]
+].map(function(a){return {id:a[0],c:a[1],d:a[2],a:a[3],dia:a[4],h:a[5]};});
+var intentos=0, drag=null;
+function en(dia,h){return S.filter(function(s){return s.dia===dia&&s.h===h;});}
+function render(){
+  var sel=document.getElementById('vista').value, g='<tr><td class="h"></td>'+DIAS.map(function(d){return '<th>'+d+'</th>';}).join('')+'</tr>';
+  BLOQ.forEach(function(h){ g+='<tr><td class="h">'+h+'-'+(h+2)+'</td>';
+    DIAS.forEach(function(_,dia){ var cls='drop'; if(dia===5&&h>=13) cls+=' sab';
+      if(sel&&((DOC[sel].desde&&h<DOC[sel].desde)||busy(sel,dia,h))) cls+=' nodoc';
+      g+='<td class="'+cls+'" data-dia="'+dia+'" data-h="'+h+'">'+en(dia,h).map(function(s){return '<div class="card" draggable="true" data-id="'+s.id+'">'+CURSOS[s.c].n+'<small>'+s.d+' · '+s.a+'</small></div>';}).join('')+'</td>';});
+    g+='</tr>';});
+  document.getElementById('grid').innerHTML=g;
+  document.getElementById('pend').innerHTML='<div class="card pend" draggable="true" data-id="K09#0">Bases de Datos<small>44 inscritos · sin ubicar</small></div>';
+  bind();
+}
+function busy(d,dia,h){return S.some(function(s){return s.d===d&&s.dia===dia&&s.h===h;});}
+function validar(s,dia,h){ // devuelve {ok, duras:[], avisos:[]}
+  var duras=[], avisos=[], c=CURSOS[s.c]; var d=DOC[s.d]||{};
+  if(dia===5&&h>=13) duras.push('RD4: el sábado solo hay franja de 7:00 a 13:00 h.');
+  if(c.t){ var max=0; for(var k in AULAS) if(AULAS[k].t===c.t) max=Math.max(max,AULAS[k].c);
+    if(max<c.ins) duras.push('RD5: ninguna aula de tipo '+c.t+' tiene '+c.ins+' puestos (el máximo es '+max+'). Opciones: cambiar el tope del grupo o dividirlo.'); }
+  else {
+    if(d.desde&&h<d.desde) duras.push('RD7: '+s.d+' solo dicta después de las '+d.desde+':00 h.');
+    var o=S.filter(function(x){return x.id!==s.id&&x.dia===dia&&x.h===h;});
+    o.forEach(function(x){ if(x.d===s.d) duras.push('RD1: '+s.d+' ya dicta '+CURSOS[x.c].n+' el '+DIAS[dia]+' de '+h+' a '+(h+2)+'.'); if(x.a===s.a) duras.push('RD2: el aula '+s.a+' ya está ocupada por '+CURSOS[x.c].n+' en ese bloque.'); });
+    if(c.f>=2){ var dias=S.filter(function(x){return x.c===s.c&&x.id!==s.id;}).map(function(x){return x.dia;});
+      if(dias.some(function(x){return x===dia;})) duras.push('RB1: '+c.n+' ya tiene otra sesión programada el '+DIAS[dia]+'. Se prohíbe más de una sesión diaria del mismo curso.');
+      else if(c.f<=3&&dias.some(function(x){return Math.abs(x-dia)===1;})) avisos.push('RB1: '+c.n+' quedaría con sesiones en días consecutivos. El movimiento se permite.'); } }
+  return {duras:duras,avisos:avisos};
+}
+function intentar(id,dia,h){
+  var s=S.filter(function(x){return x.id===id;})[0]||{id:id,c:'K09',d:'D3',a:'C1',dia:-1,h:0};
+  var r=validar(s,dia,h), m=document.getElementById('msg'); intentos++;
+  var txt=CURSOS[s.c].n+' → '+DIAS[dia]+' '+h+'-'+(h+2);
+  if(r.duras.length){ m.innerHTML=r.duras.map(function(t){return '<div class="bad">Rechazado. '+t+'</div>';}).join('')+'<div>La sesión permanece donde estaba.</div>'; log(txt+': rechazado');
+  } else { if(S.indexOf(s)>-1){s.dia=dia;s.h=h;}
+    m.innerHTML='<div class="ok">Aceptado.</div>'+r.avisos.map(function(t){return '<div class="warn">Aviso. '+t+'</div>';}).join(''); log(txt+': aceptado'+(r.avisos.length?' con aviso':'')); }
+  render();
+}
+function log(t){var l=document.getElementById('log'); l.innerHTML='Intento '+intentos+': '+t+'<br>'+l.innerHTML;}
+function bind(){
+  document.querySelectorAll('.card').forEach(function(c){ c.addEventListener('dragstart',function(e){drag=c.dataset.id; e.dataTransfer.setData('text/plain',drag);}); });
+  document.querySelectorAll('td.drop').forEach(function(t){
+    t.addEventListener('dragover',function(e){e.preventDefault(); t.classList.add('over');}); t.addEventListener('dragleave',function(){t.classList.remove('over');});
+    t.addEventListener('drop',function(e){e.preventDefault(); t.classList.remove('over'); if(drag) intentar(drag,+t.dataset.dia,+t.dataset.h); drag=null;}); });
+}
+var sel=document.getElementById('vista'); for(var k in DOC){var o=document.createElement('option'); o.value=k; o.textContent='Docente '+k; sel.appendChild(o);} sel.onchange=render;
+render();
+</script></body></html>
