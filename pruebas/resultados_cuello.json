@@ -1,0 +1,5 @@
+[
+  {"k":1,"total":295,"aceptadas":41,"porCurso":14.8,"ms":66.2,"rechazosPorRegla":{"RD7":180,"RD2":24,"RD1":40,"RD8":10},"pctRD7":61.0,"pctRD1":13.6,"pctRD2":8.1,"pctRD8":3.4},
+  {"k":8,"total":47506,"aceptadas":379,"porCurso":296.9,"ms":91.0,"rechazosPorRegla":{"RD2":2923,"RD7":38080,"RD1":4592,"RD8":1532},"pctRD7":80.2,"pctRD1":9.7,"pctRD2":6.2,"pctRD8":3.2},
+  {"k":32,"total":2467393,"aceptadas":2091,"porCurso":3855.3,"ms":1084.4,"rechazosPorRegla":{"RD2":98747,"RD7":2111168,"RD1":111776,"RD8":143611},"pctRD7":85.6,"pctRD1":4.5,"pctRD2":4.0,"pctRD8":5.8}
+]
