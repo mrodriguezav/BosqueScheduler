@@ -1,0 +1,7 @@
+{
+  "base": {"bloques":32,"ubicadasMin":39,"ubicadasMax":39,"violaciones":0,"sinUbicar":["K09"]},
+  "A_cupo30": {"bloques":32,"ubicadasMin":41,"ubicadasMax":41,"violaciones":0,"sinUbicar":[],"topeGrupo":33},
+  "C_rb1_dura": {"bloques":32,"ubicadasMin":39,"ubicadasMax":39,"violaciones":0,"sinUbicar":["K09"]},
+  "D_franja6": {"bloques":37,"ubicadasMin":39,"ubicadasMax":39,"violaciones":0,"sinUbicar":["K09"]},
+  "B_rd9": {"archivosDiferentes":["Files backend-springboot\src\main\java\co\edu\unbosque\horarios\reglas\CatalogoReglas.java and C:\Users\Familia\AppData\Local\Temp\cambioB-java-16573719297336847229\horarios\reglas\CatalogoReglas.java differ", "Only in C:\Users\Familia\AppData\Local\Temp\cambioB-java-16573719297336847229\horarios: reglas/MaxSesionesPorDia.java"],"archivosNuevos":1,"archivosModificados":1,"lineasNuevasEnRegistro":1,"ubicadasMin":39,"ubicadasMax":39,"violaciones":0,"maxSesionesDocenteDia":2}
+}
