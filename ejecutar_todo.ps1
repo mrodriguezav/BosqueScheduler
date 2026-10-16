@@ -32,4 +32,7 @@ python evidencia/diagrama_secuencia.py
 Write-Host "=== 8. Ejecutando Recorrido P1 en Chromium ===" -ForegroundColor Cyan
 python pruebas/p1_recorrido.py
 
+Write-Host "=== 9. Ejecutando Prueba de Navegador Chromium (RNF1/RNF4) ===" -ForegroundColor Cyan
+python pruebas/p3_navegador.py
+
 Write-Host "=== Todas las pruebas completadas con exito. Resultados en pruebas/*.json y evidencia/ ===" -ForegroundColor Green

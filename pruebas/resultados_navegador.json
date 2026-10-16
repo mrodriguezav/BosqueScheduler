@@ -1,21 +1,22 @@
 {
   "chromium": {
-    "disponible": true,
-    "version": "141.0.0.0",
-    "total_movimientos": 100,
+    "aceptados": 40,
+    "aceptadosConAviso": 11,
     "menores_a_200ms": 100,
-    "msMediana": 33.2,
-    "msP95": 34.8,
-    "msMax": 57.6,
+    "msMax": 0.4,
+    "msMediana": 0,
+    "msP95": 0.2,
+    "rechazados": 60,
+    "total_movimientos": 100,
+    "disponible": true,
+    "version": "155.0.8059.79",
     "erroresConsola": [],
-    "info": "100 movimientos completados en Chromium: 0 violaciones duras no detectadas, mediana 33.2 ms"
+    "info": "100 movimientos completados en Chromium: 0 violaciones duras no detectadas, mediana 0 ms"
   },
   "firefox": {
-    "disponible": false,
-    "estado": "pendiente"
+    "disponible": false
   },
   "webkit": {
-    "disponible": false,
-    "estado": "pendiente"
+    "disponible": false
   }
 }

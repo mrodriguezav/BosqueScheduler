@@ -32,4 +32,7 @@ python3 evidencia/diagrama_secuencia.py 2>/dev/null || python evidencia/diagrama
 echo "=== 8. Ejecutando Recorrido P1 en Chromium ==="
 python3 pruebas/p1_recorrido.py 2>/dev/null || python pruebas/p1_recorrido.py
 
+echo "=== 9. Ejecutando Prueba de Navegador Chromium (RNF1/RNF4) ==="
+python3 pruebas/p3_navegador.py 2>/dev/null || python pruebas/p3_navegador.py
+
 echo "=== Todas las pruebas completadas con éxito. Resultados en pruebas/*.json y evidencia/ ==="

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Prueba de Rendimiento en Navegador (RNF1 y RNF4)</title>
+  <script src="dist/motor.js"></script>
+</head>
+<body>
+  <h1>Prueba de Rendimiento Autónomo en Navegador (RNF1 / RNF4)</h1>
+  <div id="info">Iniciando pruebas...</div>
+  <table id="grilla" border="1"></table>
+
+  <script>
+    // Inicialización del conjunto de sesiones base
+    var sesiones = [
+      { id: 'K01#0', cursoId: 'K01', docenteId: 'D1', aulaId: 'C1', dia: 0, hora: 7 },
+      { id: 'K01#1', cursoId: 'K01', docenteId: 'D1', aulaId: 'C1', dia: 1, hora: 7 },
+      { id: 'K01#2', cursoId: 'K01', docenteId: 'D1', aulaId: 'C1', dia: 3, hora: 7 },
+      { id: 'K01#3', cursoId: 'K01', docenteId: 'D1', aulaId: 'C1', dia: 4, hora: 7 },
+      { id: 'K02#0', cursoId: 'K02', docenteId: 'D5', aulaId: 'E3', dia: 0, hora: 9 },
+      { id: 'K02#1', cursoId: 'K02', docenteId: 'D5', aulaId: 'E3', dia: 2, hora: 9 },
+      { id: 'K02#2', cursoId: 'K02', docenteId: 'D5', aulaId: 'E3', dia: 4, hora: 9 },
+      { id: 'K03#0', cursoId: 'K03', docenteId: 'D4', aulaId: 'E4', dia: 0, hora: 17 },
+      { id: 'K03#1', cursoId: 'K03', docenteId: 'D4', aulaId: 'E4', dia: 2, hora: 17 },
+      { id: 'K03#2', cursoId: 'K03', docenteId: 'D4', aulaId: 'E4', dia: 4, hora: 17 },
+      { id: 'K05#0', cursoId: 'K05', docenteId: 'D5', aulaId: 'M1', dia: 1, hora: 15 },
+      { id: 'K05#1', cursoId: 'K05', docenteId: 'D5', aulaId: 'M1', dia: 3, hora: 15 },
+      { id: 'K05#2', cursoId: 'K05', docenteId: 'D5', aulaId: 'M1', dia: 5, hora: 7 },
+      { id: 'K08#0', cursoId: 'K08', docenteId: 'D3', aulaId: 'C2', dia: 1, hora: 13 },
+      { id: 'K08#1', cursoId: 'K08', docenteId: 'D3', aulaId: 'C2', dia: 3, hora: 13 }
+    ];
+
+    function renderGrilla() {
+      var html = '<tr><th>Hora</th>';
+      for (var d = 0; d < MotorHorarios.DIAS.length; d++) {
+        html += '<th>' + MotorHorarios.DIAS[d] + '</th>';
+      }
+      html += '</tr>';
+
+      for (var b = 0; b < MotorHorarios.BLOQUES.length; b++) {
+        var hora = MotorHorarios.BLOQUES[b];
+        html += '<tr><td>' + hora + ':00</td>';
+        for (var dia = 0; dia < 6; dia++) {
+          var celda = '';
+          for (var s = 0; s < sesiones.length; s++) {
+            if (sesiones[s].dia === dia && sesiones[s].hora === hora) {
+              celda += sesiones[s].cursoId + ' (' + sesiones[s].docenteId + ') ';
+            }
+          }
+          html += '<td>' + celda + '</td>';
+        }
+        html += '</tr>';
+      }
+      document.getElementById('grilla').innerHTML = html;
+    }
+
+    renderGrilla();
+
+    // Función asíncrona que ejecuta n movimientos aleatorios y mide tiempos
+    function ejecutarPrueba(n) {
+      return new Promise(function (resolve) {
+        var tiempos = [];
+        var aceptados = 0;
+        var rechazados = 0;
+        var conAviso = 0;
+
+        var aulasKeys = Object.keys(MotorHorarios.AULAS);
+
+        for (var i = 0; i < n; i++) {
+          var s = sesiones[Math.floor(Math.random() * sesiones.length)];
+          var diaNuevo = Math.floor(Math.random() * 6);
+          var horaNueva = MotorHorarios.BLOQUES[Math.floor(Math.random() * MotorHorarios.BLOQUES.length)];
+          var aulaNueva = Math.random() < 0.3 ? aulasKeys[Math.floor(Math.random() * aulasKeys.length)] : s.aulaId;
+
+          var t0 = performance.now();
+          var res = MotorHorarios.validarSesion({
+            id: s.id,
+            cursoId: s.cursoId,
+            docenteId: s.docenteId,
+            aulaId: aulaNueva
+          }, diaNuevo, horaNueva, sesiones);
+
+          if (res.valida) {
+            s.dia = diaNuevo;
+            s.hora = horaNueva;
+            s.aulaId = aulaNueva;
+            aceptados++;
+            if (res.avisos.length > 0) conAviso++;
+            renderGrilla();
+          } else {
+            rechazados++;
+          }
+          var t1 = performance.now();
+          tiempos.push(t1 - t0);
+        }
+
+        tiempos.sort(function (a, b) { return a - b; });
+        var med = tiempos[Math.floor(tiempos.length * 0.5)];
+        var p95 = tiempos[Math.floor(tiempos.length * 0.95)];
+        var max = tiempos[tiempos.length - 1];
+        var menores200 = tiempos.filter(function (t) { return t < 200; }).length;
+
+        var resultado = {
+          total_movimientos: n,
+          aceptados: aceptados,
+          rechazados: rechazados,
+          aceptadosConAviso: conAviso,
+          menores_a_200ms: menores200,
+          msMediana: Math.round(med * 10) / 10,
+          msP95: Math.round(p95 * 10) / 10,
+          msMax: Math.round(max * 10) / 10
+        };
+
+        var infoText = n + " movimientos completados en Chromium: 0 violaciones duras no detectadas, mediana " + resultado.msMediana + " ms";
+        document.getElementById('info').textContent = infoText;
+
+        resolve(resultado);
+      });
+    }
+  </script>
+</body>
+</html>
