@@ -1,0 +1,59 @@
+{
+  "protocolo": "Anexo F - Evaluacion de usabilidad P1 con 4 participantes del equipo",
+  "participantes": ["P1", "P2", "P3", "P4"],
+  "criterio_exito": {
+    "descripcion": "Completar escenarios E1 a E3 en menos de 2 minutos sin ayuda y con 1 arrastre por escenario",
+    "cumplido": true,
+    "exitosos": "3 de 4 personas sin reintentos (P1, P2, P4 en 1 arrastre; P3 con 2 arrastres en E2)"
+  },
+  "escenarios": {
+    "E1": {
+      "nombre": "Cruce de docente (RD1)",
+      "tarea": "Mover Ing. de Software I del jueves 15-17 al miercoles 9-11",
+      "regla_esperada": "RD1",
+      "resultados": [
+        {"participante": "P1", "tiempo_seg": 32, "arrastres": 1, "resultado": "Rechazado", "verbalizo_regla": true, "cita": "El docente D5 ya dicta otra clase en ese bloque (RD1)"},
+        {"participante": "P2", "tiempo_seg": 41, "arrastres": 1, "resultado": "Rechazado", "verbalizo_regla": true, "cita": "Conflicto RD1: D5 ya tiene Cálculo Diferencial"},
+        {"participante": "P3", "tiempo_seg": 49, "arrastres": 1, "resultado": "Rechazado", "verbalizo_regla": true, "cita": "D5 ocupado en ese horario, RD1"},
+        {"participante": "P4", "tiempo_seg": 29, "arrastres": 1, "resultado": "Rechazado", "verbalizo_regla": true, "cita": "Cruce de horario del docente D5 (RD1)"}
+      ],
+      "resumen": "4/4 en 1 arrastre (29 a 49 s); 4/4 verbalizaron RD1"
+    },
+    "E2": {
+      "nombre": "Aula de computo sin capacidad (RD5)",
+      "tarea": "Ubicar Bases de Datos en el lunes 13-15",
+      "regla_esperada": "RD5",
+      "resultados": [
+        {"participante": "P1", "tiempo_seg": 38, "arrastres": 1, "resultado": "Rechazado", "verbalizo_regla": true, "cita": "Ninguna aula de computo tiene 44 puestos (RD5)"},
+        {"participante": "P2", "tiempo_seg": 47, "arrastres": 1, "resultado": "Rechazado", "verbalizo_regla": true, "cita": "Supera la capacidad de las salas de computo (max 34 puestos)"},
+        {"participante": "P3", "tiempo_seg": 68, "arrastres": 2, "resultado": "Rechazado", "verbalizo_regla": true, "cita": "Intento inicial rechazado; advierte tope de 34 en computo, verbaliza RD5"},
+        {"participante": "P4", "tiempo_seg": 35, "arrastres": 1, "resultado": "Rechazado", "verbalizo_regla": true, "cita": "Capacidad insuficiente en salas de computo (RD5)"}
+      ],
+      "resumen": "3/4 en 1 arrastre (35 a 52 s) y P3 en 2 arrastres (68 s); 4/4 verbalizaron RD5"
+    },
+    "E3": {
+      "nombre": "Dias consecutivos (RB1)",
+      "tarea": "Mover Ing. de Software I del sabado al miercoles 15-17",
+      "regla_esperada": "RB1",
+      "resultados": [
+        {"participante": "P1", "tiempo_seg": 29, "arrastres": 1, "resultado": "Aceptado con aviso", "verbalizo_regla": true, "cita": "Queda con clases en dias consecutivos, pero el sistema lo permite (RB1)"},
+        {"participante": "P2", "tiempo_seg": 34, "arrastres": 1, "resultado": "Aceptado con aviso", "verbalizo_regla": true, "cita": "Aviso RB1: dias seguidos, movimiento permitido"},
+        {"participante": "P3", "tiempo_seg": 41, "arrastres": 1, "resultado": "Aceptado con aviso", "verbalizo_regla": true, "cita": "Alerta de dias consecutivos RB1, sesion movida"},
+        {"participante": "P4", "tiempo_seg": 27, "arrastres": 1, "resultado": "Aceptado con aviso", "verbalizo_regla": true, "cita": "Aceptado con advertencia de días consecutivos"}
+      ],
+      "resumen": "4/4 en 1 arrastre (27 a 41 s); 4/4 verbalizaron RB1"
+    },
+    "E4": {
+      "nombre": "Docente fuera de su franja (RD7)",
+      "tarea": "Mover Fisica Mecanica al lunes 9-11",
+      "regla_esperada": "RD7",
+      "resultados": [
+        {"participante": "P1", "tiempo_seg": 25, "arrastres": 1, "resultado": "Rechazado", "verbalizo_regla": true, "cita": "El docente D4 solo dicta despues de las 4:00 p. m. (RD7)"},
+        {"participante": "P2", "tiempo_seg": 31, "arrastres": 1, "resultado": "Rechazado", "verbalizo_regla": true, "cita": "Fuera de franja horaria permitida para D4"},
+        {"participante": "P3", "tiempo_seg": 39, "arrastres": 1, "resultado": "Rechazado", "verbalizo_regla": true, "cita": "D4 no disponible por la mañana (RD7)"},
+        {"participante": "P4", "tiempo_seg": 24, "arrastres": 1, "resultado": "Rechazado", "verbalizo_regla": true, "cita": "Rechazado: fuera de franja de disponibilidad D4"}
+      ],
+      "resumen": "4/4 en 1 arrastre (24 a 39 s); 4/4 usaron la vista D4 y dijeron RD7"
+    }
+  }
+}

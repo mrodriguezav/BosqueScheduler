@@ -1,0 +1,46 @@
+[
+  {
+    "escenario": "E1 cruce de docente (RD1)",
+    "arrastres": 1,
+    "regla_en_mensaje": true,
+    "mensaje": "Rechazado. RD1: D5 ya dicta Cálculo Diferencial el Mié de 9 a 11. La sesión permanece donde estaba.",
+    "sesion_se_movio": false,
+    "esperado_aceptar": false,
+    "resultado_esperado": true,
+    "erroresConsola": []
+  },
+  {
+    "escenario": "E2 aula de cómputo sin capacidad (RD5)",
+    "arrastres": 1,
+    "regla_en_mensaje": true,
+    "mensaje": "Rechazado. RD5: ninguna aula de tipo computo tiene 44 puestos (el máximo es 34). Opciones: cambiar el tope del grupo o dividirlo. La sesión permanece donde estaba.",
+    "sesion_se_movio": false,
+    "esperado_aceptar": false,
+    "resultado_esperado": true,
+    "erroresConsola": []
+  },
+  {
+    "escenario": "E3 días consecutivos (RB1)",
+    "arrastres": 1,
+    "regla_en_mensaje": true,
+    "mensaje": "Aceptado. Aviso. RB1: Ing. de Software I quedaría con sesiones en días consecutivos. El movimiento se permite.",
+    "sesion_se_movio": true,
+    "esperado_aceptar": true,
+    "resultado_esperado": true,
+    "erroresConsola": []
+  },
+  {
+    "escenario": "E4 docente fuera de su franja (RD7)",
+    "arrastres": 1,
+    "regla_en_mensaje": true,
+    "mensaje": "Rechazado. RD7: D4 solo dicta después de las 16:00 h. La sesión permanece donde estaba.",
+    "sesion_se_movio": false,
+    "esperado_aceptar": false,
+    "resultado_esperado": true,
+    "erroresConsola": []
+  },
+  {
+    "escenario": "E5 vista por docente D4",
+    "celdas_marcadas_no_disponibles": 27
+  }
+]
