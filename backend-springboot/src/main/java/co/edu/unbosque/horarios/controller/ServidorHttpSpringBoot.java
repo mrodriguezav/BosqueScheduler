@@ -105,11 +105,29 @@ public class ServidorHttpSpringBoot {
             }
         });
 
+        server.createContext("/v3/api-docs", exchange -> {
+            try {
+                agregarCors(exchange);
+                String spec = "{\"openapi\":\"3.0.3\",\"info\":{\"title\":\"BosqueScheduler REST API\",\"version\":\"3.0.0-M3\",\"description\":\"API REST del motor combinatorio BosqueScheduler (Java 21 / Spring Boot 3.3)\"},"
+                    + "\"paths\":{\"/api/horario\":{\"get\":{\"summary\":\"Obtener estado del horario\"}},"
+                    + "\"/api/horario/cargar\":{\"post\":{\"summary\":\"Cargar datos JSON y generar horario (RF1)\"}},"
+                    + "\"/api/horario/mover\":{\"post\":{\"summary\":\"Mover sesion (RF2) o reasignar aula (RF3)\"}},"
+                    + "\"/api/horario/reiniciar\":{\"post\":{\"summary\":\"Modificar parametros y regenerar (RF6)\"}},"
+                    + "\"/api/horario/exportar\":{\"get\":{\"summary\":\"Exportar horario validado a CSV o JSON (RNF4)\"}}}}";
+                enviarBytes(exchange, 200, JSON, spec.getBytes(StandardCharsets.UTF_8));
+            } finally {
+                exchange.close();
+            }
+        });
+
         server.createContext("/", exchange -> {
             try {
                 agregarCors(exchange);
                 String reqPath = exchange.getRequestURI().getPath();
                 if ("/".equals(reqPath)) reqPath = "/index.html";
+                if ("/swagger".equals(reqPath) || "/swagger-ui".equals(reqPath) || "/swagger-ui/index.html".equals(reqPath)) {
+                    reqPath = "/swagger-ui.html";
+                }
                 Path base = Path.of(".").toAbsolutePath().normalize();
                 Path file = base.resolve(reqPath.substring(1)).normalize();
                 if (!file.startsWith(base)) {

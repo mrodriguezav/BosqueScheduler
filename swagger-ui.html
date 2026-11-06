@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BosqueScheduler API · Swagger UI (OpenAPI 3.0)</title>
+  <style>
+    :root { --bg:#fafafa; --card:#fff; --tx:#3b4151; --ln:#d8dde7; --get:#61affe; --post:#49cc90; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font: 13px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg); color: var(--tx); }
+    .topbar { background: #1b1b1b; color: #fff; padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; }
+    .topbar .brand { font-size: 18px; font-weight: bold; color: #89bf04; letter-spacing: .3px; }
+    .topbar .spec-url { background: #333; border: 1px solid #555; color: #eee; padding: 4px 10px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+    .container { max-width: 1080px; margin: 20px auto; padding: 0 16px 40px; }
+    .info-header { background: #fff; border: 1px solid var(--ln); border-radius: 4px; padding: 16px 20px; margin-bottom: 18px; }
+    .info-header h1 { margin: 0 0 6px; font-size: 22px; display: flex; align-items: center; gap: 10px; }
+    .badge { font-size: 11px; padding: 2px 8px; border-radius: 12px; background: #7d8492; color: #fff; font-weight: bold; }
+    .badge.oas { background: #89bf04; }
+    .server-box { margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee; font-size: 12px; }
+    .opblock { border: 1px solid; border-radius: 4px; margin-bottom: 12px; background: #fff; overflow: hidden; }
+    .opblock.get { border-color: var(--get); background: rgba(97,175,254,.07); }
+    .opblock.post { border-color: var(--post); background: rgba(73,204,144,.07); }
+    .op-summary { display: flex; align-items: center; gap: 12px; padding: 8px 14px; cursor: pointer; }
+    .method { font-weight: bold; color: #fff; padding: 5px 14px; border-radius: 3px; min-width: 74px; text-align: center; font-size: 12px; }
+    .get .method { background: var(--get); }
+    .post .method { background: var(--post); }
+    .path { font-family: Consolas, monospace; font-weight: bold; font-size: 14px; color: #222; }
+    .desc { color: #555; font-size: 12.5px; flex: 1; }
+    .op-body { padding: 12px 16px; border-top: 1px solid rgba(0,0,0,.1); background: #fff; }
+    textarea, input { width: 100%; font-family: Consolas, monospace; font-size: 12px; padding: 8px; border: 1px solid #ccc; border-radius: 3px; margin: 6px 0 10px; }
+    button.exec { background: #4990e2; color: #fff; border: none; padding: 7px 18px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12.5px; }
+    button.exec:hover { background: #357abd; }
+    pre.resp { background: #263238; color: #eeffff; padding: 10px 12px; border-radius: 4px; font: 11.5px/1.4 Consolas, monospace; max-height: 240px; overflow: auto; margin: 8px 0 0; }
+    .links { display: flex; gap: 12px; margin-top: 8px; }
+    .links a { color: #0d47a1; font-weight: bold; text-decoration: none; }
+    .links a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="brand">Swagger UI · BosqueScheduler REST API</div>
+    <div class="spec-url">/v3/api-docs · OpenAPI 3.0.3</div>
+  </div>
+  <div class="container">
+    <div class="info-header">
+      <h1>BosqueScheduler REST API <span class="badge">v3.0.0-M3</span> <span class="badge oas">OAS 3.0</span></h1>
+      <div>Motor combinatorio en Java 21 / Spring Boot 3.3 para programación, validación (Patrón GoF Strategy: RD1–RD8, RB1) y exportación de horarios académicos.</div>
+      <div class="server-box">
+        <strong>Server Base URL:</strong> <code>http://127.0.0.1:8080</code>
+        <div class="links">
+          <a href="/index.html">Ir a Consola de Administración (/index.html)</a>
+          <a href="/v3/api-docs" target="_blank">Ver Especificación OpenAPI JSON (/v3/api-docs)</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. GET /api/horario -->
+    <div class="opblock get">
+      <div class="op-summary">
+        <span class="method">GET</span>
+        <span class="path">/api/horario</span>
+        <span class="desc">Retorna el estado íntegro del horario: bloques, cursos, docentes, aulas, sesiones ubicadas, sinUbicar (RF5) y auditoría.</span>
+      </div>
+      <div class="op-body">
+        <button class="exec" onclick="ejecutarGet('/api/horario', 'out-get')">Execute GET /api/horario</button>
+        <pre class="resp" id="out-get">Presione Execute para consultar el estado actual...</pre>
+      </div>
+    </div>
+
+    <!-- 2. POST /api/horario/cargar -->
+    <div class="opblock post">
+      <div class="op-summary">
+        <span class="method">POST</span>
+        <span class="path">/api/horario/cargar</span>
+        <span class="desc">Carga el catálogo de entrada (datos_prueba_20cursos.json: 20 cursos, 12 docentes, 12 aulas) y ejecuta generarConRetroceso (RF1).</span>
+      </div>
+      <div class="op-body">
+        <label><strong>Request Body (application/json):</strong></label>
+        <textarea id="body-cargar" rows="3">{"archivo":"datos_prueba_20cursos.json"}</textarea>
+        <button class="exec" onclick="ejecutarPost('/api/horario/cargar', 'body-cargar', 'out-cargar')">Execute POST /api/horario/cargar</button>
+        <pre class="resp" id="out-cargar">Presione Execute para cargar y generar el horario...</pre>
+      </div>
+    </div>
+
+    <!-- 3. POST /api/horario/mover -->
+    <div class="opblock post">
+      <div class="op-summary">
+        <span class="method">POST</span>
+        <span class="path">/api/horario/mover</span>
+        <span class="desc">Evalúa y aplica un traslado de bloque (RF2) o reasignación de aula (RF3) validando las 9 reglas Strategy en O(1).</span>
+      </div>
+      <div class="op-body">
+        <label><strong>Request Body (application/json) — Ejemplo RF3 o Prueba de Ruptura RD7:</strong></label>
+        <textarea id="body-mover" rows="3">{"sesionId":"K03#0","bloqueId":"0-17","aulaId":"E5"}</textarea>
+        <button class="exec" onclick="ejecutarPost('/api/horario/mover', 'body-mover', 'out-mover')">Execute POST /api/horario/mover</button>
+        <button class="exec" style="background:#c62828;margin-left:8px" onclick="document.getElementById('body-mover').value='{\"sesionId\":\"K03#0\",\"bloqueId\":\"0-9\",\"aulaId\":\"E4\"}';ejecutarPost('/api/horario/mover', 'body-mover', 'out-mover')">Probar Ruptura RD7 (D4 a las 9:00)</button>
+        <pre class="resp" id="out-mover">Presione Execute para validar movimiento...</pre>
+      </div>
+    </div>
+
+    <!-- 4. POST /api/horario/reiniciar -->
+    <div class="opblock post">
+      <div class="op-summary">
+        <span class="method">POST</span>
+        <span class="path">/api/horario/reiniciar</span>
+        <span class="desc">Actualiza parámetros de planeación (RF6: cupoMaximo, severidadRb1, inicioSemana) y regenera el horario completo.</span>
+      </div>
+      <div class="op-body">
+        <label><strong>Request Body (application/json):</strong></label>
+        <textarea id="body-reiniciar" rows="3">{"cupoMaximo":"40","severidadRb1":"aviso","inicioSemana":"7"}</textarea>
+        <button class="exec" onclick="ejecutarPost('/api/horario/reiniciar', 'body-reiniciar', 'out-reiniciar')">Execute POST /api/horario/reiniciar</button>
+        <pre class="resp" id="out-reiniciar">Presione Execute para regenerar con parámetros...</pre>
+      </div>
+    </div>
+
+    <!-- 5. GET /api/horario/exportar -->
+    <div class="opblock get">
+      <div class="op-summary">
+        <span class="method">GET</span>
+        <span class="path">/api/horario/exportar</span>
+        <span class="desc">Exporta la programación validada a formato CSV (40 líneas: encabezado + 39 sesiones) o JSON auditado (?formato=csv|json).</span>
+      </div>
+      <div class="op-body">
+        <button class="exec" onclick="ejecutarGet('/api/horario/exportar?formato=csv', 'out-exportar')">Execute GET /api/horario/exportar?formato=csv</button>
+        <button class="exec" style="margin-left:8px" onclick="window.location.href='/api/horario/exportar?formato=csv'">Descargar CSV</button>
+        <pre class="resp" id="out-exportar">Presione Execute para previsualizar el CSV exportado...</pre>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function ejecutarGet(url, outId) {
+      fetch(url).then(function(r){ return r.text(); }).then(function(txt){
+        try { document.getElementById(outId).textContent = JSON.stringify(JSON.parse(txt), null, 2); }
+        catch(e) { document.getElementById(outId).textContent = txt; }
+      }).catch(function(err){ document.getElementById(outId).textContent = 'Error: ' + err; });
+    }
+    function ejecutarPost(url, bodyId, outId) {
+      var b = document.getElementById(bodyId).value;
+      fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: b })
+        .then(function(r){ return r.text(); })
+        .then(function(txt){
+          try { document.getElementById(outId).textContent = JSON.stringify(JSON.parse(txt), null, 2); }
+          catch(e) { document.getElementById(outId).textContent = txt; }
+        }).catch(function(err){ document.getElementById(outId).textContent = 'Error: ' + err; });
+    }
+  </script>
+</body>
+</html>
