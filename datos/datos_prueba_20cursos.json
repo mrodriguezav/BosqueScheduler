@@ -1,0 +1,72 @@
+{
+  "metadata": {
+    "nombre": "Catálogo Base Ingeniería de Sistemas - Universidad El Bosque",
+    "version": "3.0.0-M3",
+    "totalCursos": 20,
+    "totalSesiones": 41,
+    "totalDocentes": 12,
+    "totalAulas": 12,
+    "bloquesSemanales": 32
+  },
+  "configuracion": {
+    "cupoMaximo": 40,
+    "tolerancia": 0.10,
+    "duracionSesion": 2,
+    "franjaSemana": { "inicio": 7, "fin": 22 },
+    "franjaSabado": { "inicio": 7, "fin": 13 },
+    "almuerzo": { "inicio": 12, "fin": 13 },
+    "dedicacion": { "TC": 8, "TQ": 6, "MT": 4, "UQ": 2 },
+    "severidades": { "RB1": "aviso" }
+  },
+  "aulas": [
+    { "id": "E1", "tipo": "estandar", "capacidad": 45 },
+    { "id": "E2", "tipo": "estandar", "capacidad": 45 },
+    { "id": "E3", "tipo": "estandar", "capacidad": 45 },
+    { "id": "E4", "tipo": "estandar", "capacidad": 50 },
+    { "id": "E5", "tipo": "estandar", "capacidad": 50 },
+    { "id": "C1", "tipo": "computo", "capacidad": 34 },
+    { "id": "C2", "tipo": "computo", "capacidad": 34 },
+    { "id": "C3", "tipo": "computo", "capacidad": 32 },
+    { "id": "C4", "tipo": "computo", "capacidad": 30 },
+    { "id": "M1", "tipo": "movil", "capacidad": 44 },
+    { "id": "M2", "tipo": "movil", "capacidad": 40 },
+    { "id": "M3", "tipo": "movil", "capacidad": 40 }
+  ],
+  "docentes": [
+    { "id": "D1", "nombre": "Docente D1", "dedicacion": "TC", "disponibilidad": null },
+    { "id": "D2", "nombre": "Docente D2", "dedicacion": "TC", "disponibilidad": { "dias": null, "desde": null, "hasta": 13 } },
+    { "id": "D3", "nombre": "Docente D3", "dedicacion": "TC", "disponibilidad": null },
+    { "id": "D4", "nombre": "Docente D4", "dedicacion": "TC", "disponibilidad": { "dias": null, "desde": 16, "hasta": null } },
+    { "id": "D5", "nombre": "Docente D5", "dedicacion": "TQ", "disponibilidad": null },
+    { "id": "D6", "nombre": "Docente D6", "dedicacion": "TQ", "disponibilidad": { "dias": [0, 1, 2, 3], "desde": null, "hasta": null } },
+    { "id": "D7", "nombre": "Docente D7", "dedicacion": "TQ", "disponibilidad": null },
+    { "id": "D8", "nombre": "Docente D8", "dedicacion": "MT", "disponibilidad": null },
+    { "id": "D9", "nombre": "Docente D9", "dedicacion": "MT", "disponibilidad": { "dias": null, "desde": null, "hasta": 13 } },
+    { "id": "D10", "nombre": "Docente D10", "dedicacion": "MT", "disponibilidad": { "dias": null, "desde": 13, "hasta": null } },
+    { "id": "D11", "nombre": "Docente D11", "dedicacion": "UQ", "disponibilidad": null },
+    { "id": "D12", "nombre": "Docente D12", "dedicacion": "UQ", "disponibilidad": { "dias": [1, 3], "desde": null, "hasta": null } }
+  ],
+  "cursos": [
+    { "id": "K01", "nombre": "Programación I", "tipoAula": "computo", "inscritos": 30, "frecuencia": 4, "habilitados": ["D1", "D3", "D7"] },
+    { "id": "K02", "nombre": "Cálculo Diferencial", "tipoAula": "estandar", "inscritos": 42, "frecuencia": 3, "habilitados": ["D1", "D5", "D6"] },
+    { "id": "K03", "nombre": "Física Mecánica", "tipoAula": "estandar", "inscritos": 44, "frecuencia": 3, "habilitados": ["D4"] },
+    { "id": "K04", "nombre": "Estructuras de Datos", "tipoAula": "computo", "inscritos": 32, "frecuencia": 3, "habilitados": ["D1", "D3", "D7"] },
+    { "id": "K05", "nombre": "Ingeniería de Software I", "tipoAula": "movil", "inscritos": 40, "frecuencia": 3, "habilitados": ["D3", "D5", "D8"] },
+    { "id": "K06", "nombre": "Álgebra Lineal", "tipoAula": "estandar", "inscritos": 40, "frecuencia": 2, "habilitados": ["D2", "D6", "D9"] },
+    { "id": "K07", "nombre": "Matemáticas Discretas", "tipoAula": "estandar", "inscritos": 38, "frecuencia": 2, "habilitados": ["D2", "D5", "D9"] },
+    { "id": "K08", "nombre": "Redes de Datos I", "tipoAula": "computo", "inscritos": 34, "frecuencia": 2, "habilitados": ["D3", "D7", "D10"] },
+    { "id": "K09", "nombre": "Bases de Datos", "tipoAula": "computo", "inscritos": 44, "frecuencia": 2, "habilitados": ["D3", "D7", "D8"] },
+    { "id": "K10", "nombre": "Sistemas Operativos", "tipoAula": "estandar", "inscritos": 40, "frecuencia": 2, "habilitados": ["D1", "D7", "D10"] },
+    { "id": "K11", "nombre": "Probabilidad y Estadística", "tipoAula": "estandar", "inscritos": 44, "frecuencia": 2, "habilitados": ["D2", "D6", "D12"] },
+    { "id": "K12", "nombre": "Dinámica de Sistemas", "tipoAula": "movil", "inscritos": 38, "frecuencia": 2, "habilitados": ["D5", "D8", "D11"] },
+    { "id": "K13", "nombre": "Modelos y Simulación", "tipoAula": "movil", "inscritos": 36, "frecuencia": 2, "habilitados": ["D5", "D8", "D12"] },
+    { "id": "K14", "nombre": "Complejidad Algorítmica", "tipoAula": "estandar", "inscritos": 38, "frecuencia": 2, "habilitados": ["D1", "D3", "D10"] },
+    { "id": "K15", "nombre": "Arquitectura de Computadores", "tipoAula": "computo", "inscritos": 30, "frecuencia": 2, "habilitados": ["D7", "D10", "D12"] },
+    { "id": "K16", "nombre": "Ética Profesional", "tipoAula": "estandar", "inscritos": 44, "frecuencia": 1, "habilitados": ["D9", "D11", "D12"] },
+    { "id": "K17", "nombre": "Inglés Técnico", "tipoAula": "estandar", "inscritos": 35, "frecuencia": 1, "habilitados": ["D9", "D11", "D12"] },
+    { "id": "K18", "nombre": "Investigación Tecnológica", "tipoAula": "movil", "inscritos": 40, "frecuencia": 1, "habilitados": ["D5", "D8", "D11"] },
+    { "id": "K19", "nombre": "Electiva Humanística", "tipoAula": "estandar", "inscritos": 40, "frecuencia": 1, "habilitados": ["D6", "D11", "D12"] },
+    { "id": "K20", "nombre": "Seminario de Grado", "tipoAula": "estandar", "inscritos": 25, "frecuencia": 1, "habilitados": ["D1", "D8", "D10"] }
+  ]
+}
+

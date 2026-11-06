@@ -1,0 +1,17 @@
+=== Ejecutando Suite Integral QA Módulo 3 (PruebasEntregaFinalM3Test) ===
+[PASS] RF1      | Generación inicial con 20 asignaturas               | Ubicadas: 39/41, Sin ubicar: K09 (RD5), Violaciones Auditor: 0
+[PASS] RD1      | Bloqueo de choque de docente mismo bloque           | El docente D1 ya dicta K01#0 en ese bloque
+[PASS] RD2      | Bloqueo de choque de aula mismo bloque              | El aula C4 ya está ocupada por K01#0 en ese bloque
+[PASS] RD3      | Bloqueo de docente no habilitado en curso           | El docente D12 no está habilitado para Programación I
+[PASS] RD4      | Bloqueo de sesión en franja de almuerzo/inválida    | El bloque está fuera de la franja horaria declarada
+[PASS] RD5-A    | Bloqueo por capacidad insuficiente (K09 en C1)      | El aula C1 tiene 34 puestos y el curso requiere 44
+[PASS] RD5-B    | Bloqueo por tipo de aula incompatible               | El aula E1 es de tipo estandar y el curso requiere computo
+[PASS] RD6      | Bloqueo de bloque con duración distinta de 2h       | La sesión debe ocupar exactamente un bloque de la duración configurada
+[PASS] RD7      | Bloqueo fuera de disponibilidad docente (D4 a las 9:00) | El docente D4 no está disponible en ese bloque
+[PASS] RD8      | Bloqueo por superar tope semanal de dedicación (UQ=2) | El docente D12 superaría su tope de 2 sesiones semanales
+[PASS] RB1-A    | Advertencia blanda en días consecutivos (severidad=aviso) | Ingeniería de Software I quedaría con sesiones en días consecutivos
+[PASS] RB1-B    | Bloqueo duro en días consecutivos (severidad=dura)  | Ingeniería de Software I quedaría con sesiones en días consecutivos
+[PASS] RF3      | Reasignación de aula compatible (E4 -> E5)          | Aula actualizada a E5 en 0.8542 ms
+[PASS] M3-CARGA | Carga de datos JSON y regeneración sin violaciones  | Endpoint /api/horario/cargar -> ubicadas=39, auditoria.total=0
+[PASS] M3-EXP   | Exportación de horario a CSV (encabezado + 39 sesiones) | Líneas CSV generadas: 40 (1 encabezado + 39 sesiones)
+=== PruebasEntregaFinalM3Test: 15 / 15 pruebas superadas ===

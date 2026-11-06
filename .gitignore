@@ -19,4 +19,5 @@ Thumbs.db
 
 # Temporales y logs
 *.log
+!pruebas/qa_m3_execution.log
 npm-debug.log*

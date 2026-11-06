@@ -41,12 +41,10 @@ var MotorHorarios = (function () {
         var curso = CURSOS[s.cursoId] || { nombre: s.cursoId, frecuencia: 2 };
         var doc = DOCENTES[s.docenteId] || {};
 
-        // RD4: Sabado despues de 13:00
         if (dia === 5 && hora >= 13) {
             duras.push({ regla: 'RD4', motivo: 'Sábado fuera de franja de 7:00 a 13:00' });
         }
 
-        // RD5: Capacidad de aula
         var aula = AULAS[s.aulaId];
         if (aula) {
             if (curso.tipo && aula.tipo !== curso.tipo) {
@@ -57,12 +55,10 @@ var MotorHorarios = (function () {
             }
         }
 
-        // RD7: Franja de docente
         if (doc.desde && hora < doc.desde) {
             duras.push({ regla: 'RD7', motivo: s.docenteId + ' solo dicta después de ' + doc.desde + ':00' });
         }
 
-        // Cruces con otras sesiones
         for (var i = 0; i < horarioActual.length; i++) {
             var o = horarioActual[i];
             if (o.id === s.id) continue;
@@ -76,7 +72,6 @@ var MotorHorarios = (function () {
             }
         }
 
-        // RB1: Mismo día y días consecutivos
         var sesionesMismoCurso = horarioActual.filter(function (x) {
             return x.cursoId === s.cursoId && x.id !== s.id;
         });

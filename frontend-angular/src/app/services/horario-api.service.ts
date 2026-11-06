@@ -29,4 +29,12 @@ export class HorarioApiService {
       inicioSemana: String(inicioSemana)
     });
   }
+
+  cargarDatos(payload: unknown = {}): Observable<EstadoHorarioDto> {
+    return this.http.post<EstadoHorarioDto>(`${this.baseUrl}/cargar`, payload);
+  }
+
+  exportarTexto(formato: 'csv' | 'json'): Observable<string> {
+    return this.http.get(`${this.baseUrl}/exportar?formato=${formato}`, { responseType: 'text' });
+  }
 }

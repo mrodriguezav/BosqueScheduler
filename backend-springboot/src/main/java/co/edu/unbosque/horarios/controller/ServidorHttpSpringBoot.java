@@ -14,11 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Adaptador HTTP embebido para el controlador REST (@RestController) y recursos estáticos de Angular.
+ * Adaptador HTTP embebido para el controlador REST (@RestController) y recursos estáticos de Angular y consola web.
  */
 public class ServidorHttpSpringBoot {
 
     private static final String JSON = "application/json; charset=utf-8";
+    private static final String CSV = "text/csv; charset=utf-8";
 
     public static HttpServer iniciar(int port) throws IOException {
         HorarioService service = new HorarioService();
@@ -38,7 +39,6 @@ public class ServidorHttpSpringBoot {
                 if (path.endsWith("/")) path = path.substring(0, path.length() - 1);
                 Map<String, String> params = parseQuery(exchange.getRequestURI().getRawQuery());
                 String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
-                params.putAll(parseJsonSimple(body));
 
                 String respuesta;
                 if (path.equals("/api/horario/mover")) {
@@ -46,6 +46,7 @@ public class ServidorHttpSpringBoot {
                         enviarError(exchange, 405, "Use POST para /api/horario/mover");
                         return;
                     }
+                    params.putAll(parseJsonSimple(body));
                     respuesta = controller.moverSesionJson(
                         params.getOrDefault("sesionId", ""),
                         params.getOrDefault("bloqueId", ""),
@@ -56,10 +57,33 @@ public class ServidorHttpSpringBoot {
                         enviarError(exchange, 405, "Use POST para " + path);
                         return;
                     }
+                    params.putAll(parseJsonSimple(body));
                     int cupo = parseEntero(params, "cupoMaximo", 40);
                     String rb1 = params.getOrDefault("severidadRb1", "aviso");
                     int ini = parseEntero(params, "inicioSemana", 7);
                     respuesta = controller.reiniciarJson(cupo, rb1, ini);
+                } else if (path.equals("/api/horario/cargar")) {
+                    if (!"POST".equalsIgnoreCase(metodo)) {
+                        enviarError(exchange, 405, "Use POST para /api/horario/cargar");
+                        return;
+                    }
+                    respuesta = controller.cargarDatosJson(body);
+                } else if (path.equals("/api/horario/exportar")) {
+                    if (!"GET".equalsIgnoreCase(metodo)) {
+                        enviarError(exchange, 405, "Use GET para /api/horario/exportar");
+                        return;
+                    }
+                    String formato = params.getOrDefault("formato", "csv").trim().toLowerCase();
+                    if ("json".equals(formato)) {
+                        exchange.getResponseHeaders().set("Content-Disposition", "attachment; filename=\"horario_bosquescheduler.json\"");
+                        enviarBytes(exchange, 200, JSON, controller.obtenerEstadoJson().getBytes(StandardCharsets.UTF_8));
+                    } else if ("csv".equals(formato) || formato.isEmpty()) {
+                        exchange.getResponseHeaders().set("Content-Disposition", "attachment; filename=\"horario_bosquescheduler.csv\"");
+                        enviarBytes(exchange, 200, CSV, controller.exportarCsv().getBytes(StandardCharsets.UTF_8));
+                    } else {
+                        enviarError(exchange, 400, "Formato no soportado: " + formato + ". Use csv o json.");
+                    }
+                    return;
                 } else if (path.equals("/api/horario")) {
                     if (!"GET".equalsIgnoreCase(metodo)) {
                         enviarError(exchange, 405, "Use GET para /api/horario");
@@ -94,6 +118,7 @@ public class ServidorHttpSpringBoot {
                     String mime = reqPath.endsWith(".js") ? "application/javascript; charset=utf-8"
                                 : reqPath.endsWith(".css") ? "text/css; charset=utf-8"
                                 : reqPath.endsWith(".json") ? JSON
+                                : reqPath.endsWith(".csv") ? CSV
                                 : "text/html; charset=utf-8";
                     enviarBytes(exchange, 200, mime, Files.readAllBytes(file));
                 } else {

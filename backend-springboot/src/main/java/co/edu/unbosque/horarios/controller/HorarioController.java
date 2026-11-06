@@ -1,5 +1,10 @@
 package co.edu.unbosque.horarios.controller;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+
 import co.edu.unbosque.horarios.config.Configuracion;
 import co.edu.unbosque.horarios.model.Aula;
 import co.edu.unbosque.horarios.model.Bloque;
@@ -17,11 +22,13 @@ import co.edu.unbosque.horarios.service.HorarioService.RespuestaMovimiento;
 import co.edu.unbosque.horarios.service.SistemaHorarios;
 
 /**
- * Controlador REST (@RestController) que expone el motor Java 21 / Spring Boot al cliente Angular.
- * Rutas:
- *  - GET  /api/horario         -> Estado completo del horario, contexto, sesiones, sinUbicar y auditoría
- *  - POST /api/horario/mover   -> Evalúa y aplica (si no hay violación dura) un movimiento de sesión
- *  - POST /api/horario/generar -> Regenera el horario con configuración opcional
+ * Controlador REST (@RestController) que expone el motor Java 21 / Spring Boot al cliente Angular y consola web.
+ * Rutas activas en el Módulo 3:
+ *  - GET  /api/horario          -> Estado completo del horario, contexto, sesiones, sinUbicar y auditoría
+ *  - POST /api/horario/mover    -> Evalúa y aplica (si no hay violación dura) un traslado de bloque (RF2) o cambio de aula (RF3)
+ *  - POST /api/horario/reiniciar-> Regenera el horario con configuración opcional (RF6)
+ *  - POST /api/horario/cargar   -> Carga conjunto de datos JSON (20 asignaturas, 12 docentes, 12 aulas) y ejecuta generarConRetroceso (RF1)
+ *  - GET  /api/horario/exportar -> Exporta horario validado a CSV (40 líneas) o JSON auditado (RNF4)
  */
 public class HorarioController {
     private final HorarioService service;
@@ -41,6 +48,8 @@ public class HorarioController {
 
         StringBuilder sb = new StringBuilder();
         sb.append("{");
+        sb.append("\"archivo\":\"datos_prueba_20cursos.json\",");
+        sb.append("\"tiempoMs\":").append(String.format(Locale.US, "%.4f", service.getUltimoTiempoCargaMs())).append(",");
         sb.append("\"ubicadas\":").append(h.totalSesiones()).append(",");
         sb.append("\"totalSesiones\":").append(totalSesiones).append(",");
         sb.append("\"evaluaciones\":").append(gen.evaluaciones).append(",");
@@ -157,7 +166,7 @@ public class HorarioController {
         RespuestaMovimiento r = service.intentarMover(sesionId, bloqueId, aulaId);
         StringBuilder sb = new StringBuilder();
         sb.append("{\"aceptado\":").append(r.aceptado)
-          .append(",\"tiempoMs\":").append(String.format(java.util.Locale.US, "%.4f", r.tiempoMs))
+          .append(",\"tiempoMs\":").append(String.format(Locale.US, "%.4f", r.tiempoMs))
           .append(",\"violaciones\":[");
         boolean first = true;
         for (Violacion v : r.violaciones) {
@@ -192,6 +201,51 @@ public class HorarioController {
         cfg.franja.semana.inicio = inicioSemana;
         service.reiniciar(cfg, true);
         return obtenerEstadoJson();
+    }
+
+    public String cargarDatosJson(String payload) {
+        service.cargarDatos(payload);
+        return obtenerEstadoJson();
+    }
+
+    public String exportarCsv() {
+        SistemaHorarios sis = service.getSistema();
+        Horario h = service.getHorarioActual();
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("SesionID,CursoID,Asignatura,DocenteID,Dedicacion,AulaID,TipoAula,CapacidadAula,BloqueID,Dia,HoraInicio,HoraFin\n");
+
+        List<Sesion> lista = new ArrayList<>(h.getSesiones().values());
+        lista.sort(Comparator.comparing(s -> s.id));
+
+        for (Sesion s : lista) {
+            Curso c = sis.ctx.cursos.get(s.cursoId);
+            Docente d = sis.ctx.docentes.get(s.docenteId);
+            Aula a = sis.ctx.aulas.get(s.aulaId);
+            Bloque b = sis.ctx.bloquePorId.get(s.bloqueId);
+
+            String nombreCurso = c != null ? c.nombre.replace(",", " ") : s.cursoId;
+            String dedicacion = d != null ? d.dedicacion : "";
+            String tipoAula = a != null ? a.tipo : "";
+            int capAula = a != null ? a.capacidad : 0;
+            String nombreDia = b != null ? b.nombreDia : "";
+            String horaIni = b != null ? (b.inicio + ":00") : "";
+            String horaFin = b != null ? (b.fin + ":00") : "";
+
+            sb.append(s.id).append(",")
+              .append(s.cursoId).append(",")
+              .append(nombreCurso).append(",")
+              .append(s.docenteId).append(",")
+              .append(dedicacion).append(",")
+              .append(s.aulaId).append(",")
+              .append(tipoAula).append(",")
+              .append(capAula).append(",")
+              .append(s.bloqueId).append(",")
+              .append(nombreDia).append(",")
+              .append(horaIni).append(",")
+              .append(horaFin).append("\n");
+        }
+        return sb.toString();
     }
 
     private static String esc(String s) {
