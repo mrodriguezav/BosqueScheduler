@@ -53,7 +53,7 @@ td.nodoc { background: repeating-linear-gradient(45deg, rgba(211,47,47,.07) 0 5p
 .msg .bad { color: var(--bad); font-weight: bold; }
 .msg .warn { color: var(--warn); font-weight: bold; }
 .msg .ok { color: var(--okc); font-weight: bold; }
-.log { font: 11px/1.4 Consolas, monospace; color: #444; margin-top: 6px; max-height: 76px; overflow: auto; border: 1px solid #ccc; padding: 4px 8px; background: #fafafa; }
+.log { font: 12px/1.6 Consolas, monospace; color: #333; margin-top: 8px; margin-bottom: 24px; min-height: 220px; border: 1.5px solid #bbb; padding: 10px 14px; background: #fafafa; border-radius: 2px; }
 select { font-size: 12px; }
 .info { margin-bottom: 8px; }
 .info .bad { color: var(--bad); font-weight: bold; }
